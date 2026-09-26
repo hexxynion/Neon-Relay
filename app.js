@@ -1,95 +1,60 @@
-import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
+const form = document.querySelector("#relayForm");
+const input = document.querySelector("#url");
+const status = document.querySelector("#status");
+const resultCard = document.querySelector("#resultCard");
+const resultTitle = document.querySelector("#resultTitle");
+const resultBody = document.querySelector("#resultBody");
+const copyBtn = document.querySelector("#copyBtn");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+  const url = input.value.trim();
 
-app.use(express.json());
-app.use(express.static(__dirname));
+  status.textContent = "Checking destination…";
+  resultCard.classList.add("hidden");
 
-// Only these domains can be checked.
-// Add your own domains here if you own/authorize them.
-const ALLOWED_HOSTS = new Set([
-  "example.com",
-  "www.example.com"
-]);
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
-app.get("/health", (req, res) => {
-  res.json({ status: "online" });
-});
-
-app.post("/api/fetch", async (req, res) => {
   try {
-    const { url } = req.body;
-
-    if (!url) {
-      return res.status(400).json({
-        error: "Please enter a URL."
-      });
-    }
-
-    let target;
-
-    try {
-      target = new URL(url);
-    } catch {
-      return res.status(400).json({
-        error: "Invalid URL."
-      });
-    }
-
-    if (!["http:", "https:"].includes(target.protocol)) {
-      return res.status(400).json({
-        error: "Only HTTP and HTTPS URLs are allowed."
-      });
-    }
-
-    if (!ALLOWED_HOSTS.has(target.hostname)) {
-      return res.status(403).json({
-        error: `This destination is not authorized. Allowed host: ${[...ALLOWED_HOSTS].join(", ")}`
-      });
-    }
-
-    const start = Date.now();
-
-    const response = await fetch(target, {
-      method: "GET",
-      redirect: "follow",
-      signal: AbortSignal.timeout(8000)
+    const response = await fetch("/api/fetch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ url })
     });
 
-    const body = await response.text();
-    const elapsed = Date.now() - start;
+    const data = await response.json();
 
-    // Keep the response reasonably small.
-    const preview = body.slice(0, 10000);
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed.");
+    }
 
-    res.json({
-      success: true,
-      status: response.status,
-      statusText: response.statusText,
-      finalUrl: response.url,
-      contentType: response.headers.get("content-type"),
-      size: body.length,
-      responseTime: `${elapsed} ms`,
-      preview
-    });
+    status.textContent = `Connected — HTTP ${data.status}`;
+    resultTitle.textContent = `HTTP ${data.status}`;
 
-  } catch (error) {
-    res.status(502).json({
-      error: "The authorized destination could not be reached."
-    });
+    resultBody.textContent =
+`URL: ${data.finalUrl}
+Status: ${data.status} ${data.statusText}
+Content-Type: ${data.contentType || "unknown"}
+Size: ${data.size} bytes
+Response time: ${data.responseTime}
+
+Preview:
+${data.preview}`;
+
+    resultCard.classList.remove("hidden");
+
+  } catch (err) {
+    status.textContent = err.message || "Request failed.";
   }
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Neon Relay running on port ${PORT}`);
+copyBtn.addEventListener("click", async () => {
+  await navigator.clipboard.writeText(resultBody.textContent);
+
+  copyBtn.textContent = "COPIED";
+
+  setTimeout(() => {
+    copyBtn.textContent = "COPY";
+  }, 1200);
 });
