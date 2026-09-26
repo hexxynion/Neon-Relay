@@ -21,6 +21,16 @@ app.get("/health", (req, res) => {
   res.json({ status: "online" });
 });
 
+// API connection test
+app.post("/api/fetch", (req, res) => {
+  res.json({
+    success: true,
+    message: "Neon Relay API is working!",
+    received: req.body
+  });
+});
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Neon Relay running on port ${PORT}`);
 });
+ 
