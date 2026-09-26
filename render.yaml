@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: neon-relay
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: ALLOWED_HOSTS
+        sync: false

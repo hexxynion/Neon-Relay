@@ -1,0 +1,31 @@
+*{box-sizing:border-box}
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f6f7fb;background:#07070b}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 15%,#24104b 0,#10091e 28%,#07070b 65%);overflow-x:hidden}
+.grid{position:fixed;inset:0;opacity:.15;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:45px 45px;mask-image:linear-gradient(to bottom,#000,transparent 80%);pointer-events:none}
+.shell{width:min(1050px,92%);margin:auto;position:relative;z-index:1}
+nav{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
+.brand{font-weight:900;letter-spacing:.12em;font-size:14px}
+.dot,.statusDot{display:inline-block;border-radius:50%;background:#b86cff;box-shadow:0 0 18px #b86cff}
+.dot{width:9px;height:9px;margin-right:10px}
+.badge{font-size:10px;letter-spacing:.16em;border:1px solid #ffffff1a;padding:9px 12px;border-radius:999px;color:#aaa}
+.hero{padding:100px 0 60px}
+.eyebrow{font-size:11px;letter-spacing:.2em;color:#a989c9;font-weight:800}
+h1{font-size:clamp(48px,8vw,92px);line-height:.94;margin:16px 0 24px;letter-spacing:-.06em}
+h1 span{background:linear-gradient(90deg,#b86cff,#6f8cff);-webkit-background-clip:text;color:transparent}
+.sub{max-width:670px;color:#a7a3af;font-size:17px;line-height:1.7}
+.card{margin-top:42px;border:1px solid #ffffff12;background:#0c0b12cc;backdrop-filter:blur(18px);border-radius:24px;padding:25px;box-shadow:0 20px 80px #0008}
+label{display:block;color:#c7c2ce;font-size:12px;font-weight:700;margin-bottom:12px}
+.inputRow{display:flex;gap:12px}
+input{flex:1;min-width:0;background:#050509;border:1px solid #ffffff18;color:white;padding:18px;border-radius:14px;outline:none;font-size:16px}
+input:focus{border-color:#a96cff;box-shadow:0 0 0 3px #a96cff18}
+button{border:0;border-radius:14px;padding:0 22px;background:linear-gradient(135deg,#b86cff,#6f8cff);color:white;font-weight:900;letter-spacing:.08em;cursor:pointer}
+button:hover{filter:brightness(1.1)}
+.hint{margin-top:14px;color:#85808e;font-size:12px;display:flex;gap:8px;align-items:center}
+.statusDot{width:6px;height:6px}
+.hidden{display:none}
+.resultTop{display:flex;justify-content:space-between;align-items:center}
+h2{margin:5px 0;font-size:22px}
+.ghost{height:38px;background:#ffffff08;border:1px solid #ffffff15;font-size:10px}
+pre{white-space:pre-wrap;word-break:break-word;max-height:500px;overflow:auto;color:#bbb5c5;background:#050509;padding:18px;border-radius:14px;font-size:12px;line-height:1.6}
+footer{border-top:1px solid #ffffff12;padding:24px 0 40px;display:flex;justify-content:space-between;color:#66616d;font-size:10px;letter-spacing:.12em}
+@media(max-width:650px){.inputRow{flex-direction:column}button{height:52px}.hero{padding-top:65px}footer{gap:20px;flex-direction:column}}
