@@ -23,6 +23,8 @@ app.get("/health", (req, res) => {
 const ALLOWED_HOSTS = new Set([
   "example.com",
   "www.example.com"
+  "google.com",
+  "www.google.com"
 ]);
 
 app.post("/api/fetch", async (req, res) => {
