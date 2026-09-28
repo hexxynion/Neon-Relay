@@ -19,10 +19,9 @@ app.get("/health", (req, res) => {
   res.json({ status: "online" });
 });
 
-// Authorized destinations only
 const ALLOWED_HOSTS = new Set([
   "example.com",
-  "www.example.com"
+  "www.example.com",
   "google.com",
   "www.google.com"
 ]);
@@ -81,6 +80,8 @@ app.post("/api/fetch", async (req, res) => {
     });
 
   } catch (error) {
+    console.error(error);
+
     res.status(502).json({
       error: "The authorized destination could not be reached."
     });
