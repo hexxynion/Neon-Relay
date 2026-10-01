@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,50 +9,94 @@
 </head>
 <body>
   <div class="grid"></div>
+
   <main class="shell">
     <nav>
       <div class="brand"><span class="dot"></span> NEON RELAY</div>
       <div class="badge">AUTHORIZED RELAY</div>
     </nav>
 
-    <section class="hero">
-      <p class="eyebrow">PRIVATE • CONTROLLED • FAST</p>
-      <h1>Relay the web.<br><span>Keep control.</span></h1>
-      <p class="sub">
-        A sleek URL relay for domains you own or explicitly authorize.
-        Requests are checked server-side before they leave the server.
-      </p>
+```
+<section class="hero">
+  <p class="eyebrow">PRIVATE • CONTROLLED • FAST</p>
 
-      <form id="relayForm" class="card">
-        <label for="url">Destination URL</label>
-        <div class="inputRow">
-          <input id="url" type="url" placeholder="https://example.com" required />
-          <button type="submit"><span>LAUNCH</span> ↗</button>
-        </div>
-        <div class="hint">
-          <span class="statusDot"></span>
-          <span id="status">Ready — enter an authorized URL.</span>
-        </div>
-      </form>
+  <h1>Relay the web.<br><span>Keep control.</span></h1>
 
-      <section class="result card hidden" id="resultCard">
-        <div class="resultTop">
-          <div>
-            <p class="eyebrow">RESPONSE</p>
-            <h2 id="resultTitle">Relay result</h2>
-          </div>
-          <button class="ghost" id="copyBtn">COPY</button>
-        </div>
-        <pre id="resultBody"></pre>
-      </section>
-    </section>
+  <p class="sub">
+    A sleek URL relay for domains you own or explicitly authorize.
+    Requests are checked server-side before they leave the server.
+  </p>
 
-    <footer>
-      <span>NEON RELAY v1.0</span>
-      <span>Allowlisted destinations only</span>
-    </footer>
+  <!-- RELAY -->
+  <form id="relayForm" class="card">
+    <label for="url">Destination URL</label>
+
+    <div class="inputRow">
+      <input
+        id="url"
+        type="url"
+        placeholder="https://example.com"
+        required
+      />
+
+      <button type="submit">
+        <span>LAUNCH</span> ↗
+      </button>
+    </div>
+
+    <div class="hint">
+      <span class="statusDot"></span>
+      <span id="status">Ready — enter an authorized URL.</span>
+    </div>
+  </form>
+
+  <!-- RELAY RESULT -->
+  <section class="result card hidden" id="resultCard">
+    <div class="resultTop">
+      <div>
+        <p class="eyebrow">RESPONSE</p>
+        <h2 id="resultTitle">Relay result</h2>
+      </div>
+
+      <button class="ghost" id="copyBtn">COPY</button>
+    </div>
+
+    <pre id="resultBody"></pre>
+  </section>
+
+  <!-- GOOGLE SEARCH -->
+  <section class="searchSection card">
+    <div class="resultTop">
+      <div>
+        <p class="eyebrow">NEON SEARCH</p>
+        <h2>Search the web.</h2>
+      </div>
+
+      <span class="badge">POWERED BY GOOGLE</span>
+    </div>
+
+    <p class="sub searchDescription">
+      Search the web directly through Neon Relay.
+    </p>
+
+    <div class="gcse-search"></div>
+  </section>
+
+</section>
+
+<footer>
+  <span>NEON RELAY v1.0</span>
+  <span>Allowlisted destinations only</span>
+</footer>
+```
+
   </main>
 
+  <!-- GOOGLE PROGRAMMABLE SEARCH -->
+
+  <script async src="https://cse.google.com/cse.js?cx=d67094c75fdee40ea"></script>
+
   <script src="/app.js"></script>
+
 </body>
 </html>
