@@ -1654,3 +1654,35 @@ footer {
     font-size: 42px;
   }
 }
+/* =========================================================
+   BOOT SCREEN EXIT
+   ========================================================= */
+
+#bootScreen {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+}
+
+#bootScreen.boot-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#app {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+  transform: translateY(20px);
+}
+
+#app.app-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
