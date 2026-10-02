@@ -1,100 +1,296 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Neon Relay</title>
+
   <link rel="stylesheet" href="/style.css" />
 </head>
+
 <body>
-  <div class="grid"></div>
 
-  <main class="shell">
-    <nav>
-      <div class="brand"><span class="dot"></span> NEON RELAY</div>
-      <div class="badge">AUTHORIZED RELAY</div>
-    </nav>
+  <!-- =====================================================
+       INTRO / BOOT SEQUENCE
+       ===================================================== -->
 
-```
-<section class="hero">
-  <p class="eyebrow">PRIVATE • CONTROLLED • FAST</p>
+  <div id="bootScreen">
 
-  <h1>Relay the web.<br><span>Keep control.</span></h1>
+    <div class="boot-grid"></div>
 
-  <p class="sub">
-    A sleek URL relay for domains you own or explicitly authorize.
-    Requests are checked server-side before they leave the server.
-  </p>
-
-  <!-- RELAY -->
-  <form id="relayForm" class="card">
-    <label for="url">Destination URL</label>
-
-    <div class="inputRow">
-      <input
-        id="url"
-        type="url"
-        placeholder="https://example.com"
-        required
-      />
-
-      <button type="submit">
-        <span>LAUNCH</span> ↗
-      </button>
+    <div class="boot-code">
+      <span>INITIALIZING RELAY_CORE...</span>
+      <span>LOADING NEURAL INTERFACE...</span>
+      <span>ESTABLISHING SECURE CHANNEL...</span>
+      <span>SYNCING NETWORK...</span>
     </div>
 
-    <div class="hint">
-      <span class="statusDot"></span>
-      <span id="status">Ready — enter an authorized URL.</span>
-    </div>
-  </form>
+    <div class="orb-wrapper">
 
-  <!-- RELAY RESULT -->
-  <section class="result card hidden" id="resultCard">
-    <div class="resultTop">
-      <div>
-        <p class="eyebrow">RESPONSE</p>
-        <h2 id="resultTitle">Relay result</h2>
+      <div class="orb-ring ring-one"></div>
+      <div class="orb-ring ring-two"></div>
+      <div class="orb-ring ring-three"></div>
+
+      <div class="energy-orb">
+
+        <div class="orb-core"></div>
+
+        <div class="orb-glow"></div>
+
+        <div class="orb-lightning lightning-one"></div>
+        <div class="orb-lightning lightning-two"></div>
+        <div class="orb-lightning lightning-three"></div>
+
       </div>
 
-      <button class="ghost" id="copyBtn">COPY</button>
-    </div>
+      <div class="welcome">
+        <div class="welcome-small">NEON RELAY // SYSTEM ONLINE</div>
 
-    <pre id="resultBody"></pre>
-  </section>
+        <div class="welcome-title">
+          WELCOME
+        </div>
 
-  <!-- GOOGLE SEARCH -->
-  <section class="searchSection card">
-    <div class="resultTop">
-      <div>
-        <p class="eyebrow">NEON SEARCH</p>
-        <h2>Search the web.</h2>
+        <div class="welcome-sub">
+          ENTER THE NETWORK
+        </div>
+
+        <button id="enterButton">
+          INITIALIZE RELAY
+          <span>↗</span>
+        </button>
       </div>
 
-      <span class="badge">POWERED BY GOOGLE</span>
     </div>
 
-    <p class="sub searchDescription">
-      Search the web directly through Neon Relay.
-    </p>
+    <div class="boot-status">
+      <span class="boot-dot"></span>
+      CONNECTION READY
+    </div>
 
-    <div class="gcse-search"></div>
-  </section>
+  </div>
 
-</section>
 
-<footer>
-  <span>NEON RELAY v1.0</span>
-  <span>Allowlisted destinations only</span>
-</footer>
-```
+  <!-- =====================================================
+       MAIN APPLICATION
+       ===================================================== -->
 
-  </main>
+  <div id="app">
+
+    <div class="code-stream">
+      <span>010101101101</span>
+      <span>const relay = online;</span>
+      <span>ACCESS_GRANTED</span>
+      <span>0x7FF21A</span>
+      <span>CONNECTING...</span>
+      <span>NEON_CORE</span>
+      <span>0100110101</span>
+      <span>HTTP://RELAY</span>
+      <span>SECURE_CHANNEL</span>
+    </div>
+
+    <div class="grid"></div>
+
+    <div class="scanlines"></div>
+
+    <main class="shell">
+
+      <nav>
+
+        <div class="brand">
+          <span class="dot"></span>
+          NEON RELAY
+        </div>
+
+        <div class="nav-status">
+          <span class="nav-live"></span>
+          SYSTEM ONLINE
+        </div>
+
+        <div class="badge">
+          AUTHORIZED RELAY
+        </div>
+
+      </nav>
+
+
+      <section class="hero">
+
+        <div class="hero-tag">
+          <span></span>
+          NETWORK NODE 07
+        </div>
+
+        <p class="eyebrow">
+          PRIVATE • CONTROLLED • FAST
+        </p>
+
+        <h1>
+          Relay the web.
+          <br>
+          <span>Keep control.</span>
+        </h1>
+
+        <p class="sub">
+          A sleek URL relay for domains you own or explicitly authorize.
+          Requests are checked server-side before they leave the server.
+        </p>
+
+
+        <!-- RELAY -->
+
+        <form id="relayForm" class="card">
+
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+
+          <label for="url">
+            Destination URL
+          </label>
+
+          <div class="inputRow">
+
+            <input
+              id="url"
+              type="url"
+              placeholder="https://example.com"
+              required
+            />
+
+            <button type="submit">
+              <span>LAUNCH</span>
+              ↗
+            </button>
+
+          </div>
+
+          <div class="hint">
+
+            <span class="statusDot"></span>
+
+            <span id="status">
+              Ready — enter an authorized URL.
+            </span>
+
+          </div>
+
+        </form>
+
+
+        <!-- RESULT -->
+
+        <section
+          class="result card hidden"
+          id="resultCard"
+        >
+
+          <div class="resultTop">
+
+            <div>
+
+              <p class="eyebrow">
+                RESPONSE
+              </p>
+
+              <h2 id="resultTitle">
+                Relay result
+              </h2>
+
+            </div>
+
+            <button
+              class="ghost"
+              id="copyBtn"
+            >
+              COPY
+            </button>
+
+          </div>
+
+          <pre id="resultBody"></pre>
+
+        </section>
+
+
+        <!-- SEARCH -->
+
+        <section class="searchSection card">
+
+          <div class="search-glow"></div>
+
+          <div class="search-header">
+
+            <div>
+
+              <p class="eyebrow">
+                NEON SEARCH // GOOGLE CORE
+              </p>
+
+              <h2>
+                Search the web.
+              </h2>
+
+              <p class="searchDescription">
+                Query the network through Neon Relay.
+              </p>
+
+            </div>
+
+            <div class="search-status">
+              <span></span>
+              SEARCH ONLINE
+            </div>
+
+          </div>
+
+          <div class="search-container">
+
+            <div class="search-inner">
+
+              <div class="search-icon">
+                ⌕
+              </div>
+
+              <div class="gcse-search"></div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </section>
+
+
+      <footer>
+
+        <span>
+          NEON RELAY // V1.0
+        </span>
+
+        <span>
+          ENCRYPTED NODE
+        </span>
+
+        <span>
+          ALLOWLISTED DESTINATIONS ONLY
+        </span>
+
+      </footer>
+
+    </main>
+
+  </div>
+
 
   <!-- GOOGLE PROGRAMMABLE SEARCH -->
 
-  <script async src="https://cse.google.com/cse.js?cx=d67094c75fdee40ea"></script>
+  <script
+    async
+    src="https://cse.google.com/cse.js?cx=d67094c75fdee40ea">
+  </script>
 
   <script src="/app.js"></script>
 
