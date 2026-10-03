@@ -280,19 +280,26 @@ function playEntrySound() {
    --------------------------------------------------------- */
 
 if (enterButton) {
-
   enterButton.addEventListener("click", () => {
 
+    // Start the cyber audio after the user's click
     startCyberAudio();
-
     playEntrySound();
 
-    enterButton.style.transform =
-      "scale(0.9)";
+    // Button press animation
+    enterButton.style.transform = "scale(0.9)";
+    enterButton.style.opacity = "0.7";
 
-    bootScreen.classList.add(
-      "boot-hidden"
-    );
+    // Shut down the boot screen
+    bootScreen.classList.add("boot-hidden");
+
+    // Bring Neon Relay online
+    setTimeout(() => {
+      app.classList.add("app-visible");
+    }, 350);
+
+  });
+}
 
     setTimeout(() => {
 
