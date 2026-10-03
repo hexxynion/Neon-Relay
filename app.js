@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   const form = document.querySelector("#relayForm");
   const input = document.querySelector("#url");
   const status = document.querySelector("#status");
@@ -13,518 +12,365 @@ document.addEventListener("DOMContentLoaded", () => {
   const enterButton = document.querySelector("#enterButton");
   const app = document.querySelector("#app");
 
-  /* =========================================================
-     NEON RELAY // CINEMATIC ENGINE
-  ========================================================= */
-
   let audioContext = null;
   let masterGain = null;
   let ambientStarted = false;
 
-  let currentState = "IDLE";
-  let particleTimer = null;
-
   /* =========================================================
-     CREATE CINEMATIC LAYER
+     TRANSFORMER ENGINE
   ========================================================= */
 
-  const cinematicLayer = document.createElement("div");
-  cinematicLayer.id = "cinematicLayer";
+  const machine = document.createElement("div");
+  machine.id = "machineEngine";
 
-  cinematicLayer.innerHTML = `
-    <div class="hud-crosshair">
-      <div class="crosshair-ring ring-a"></div>
-      <div class="crosshair-ring ring-b"></div>
-      <div class="crosshair-center"></div>
-      <span class="crosshair-label">TARGET</span>
+  machine.innerHTML = `
+    <div class="machine-scan"></div>
+
+    <div class="machine-frame">
+      <div class="machine-panel panel-left"></div>
+      <div class="machine-panel panel-right"></div>
+      <div class="machine-panel panel-top"></div>
+      <div class="machine-panel panel-bottom"></div>
+
+      <div class="machine-core">
+        <div class="core-ring core-ring-1"></div>
+        <div class="core-ring core-ring-2"></div>
+        <div class="core-ring core-ring-3"></div>
+        <div class="core-center"></div>
+      </div>
+
+      <div class="energy-beam beam-x"></div>
+      <div class="energy-beam beam-y"></div>
+
+      <div class="machine-readout">
+        <span>NEON RELAY</span>
+        <b id="machineState">STANDBY</b>
+      </div>
     </div>
 
-    <div class="hud-corners">
-      <span class="hud-corner hc1"></span>
-      <span class="hud-corner hc2"></span>
-      <span class="hud-corner hc3"></span>
-      <span class="hud-corner hc4"></span>
+    <div class="assembly-lines">
+      <i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i>
     </div>
 
-    <div class="telemetry">
-      <span>CORE_TEMP: <b id="telemetryTemp">27.4</b>°</span>
-      <span>POWER: <b id="telemetryPower">018</b>%</span>
-      <span>NODE: <b>07</b></span>
-      <span>LINK: <b id="telemetryLink">STANDBY</b></span>
-    </div>
+    <div class="impact-ring"></div>
+    <div class="impact-ring impact-2"></div>
 
-    <div class="target-lock">
-      <div class="target-line"></div>
-      <div class="target-bracket bracket-tl"></div>
-      <div class="target-bracket bracket-tr"></div>
-      <div class="target-bracket bracket-bl"></div>
-      <div class="target-bracket bracket-br"></div>
-      <span id="targetText">NO TARGET</span>
-    </div>
-
-    <div class="energy-burst"></div>
-    <div class="screen-flash"></div>
-
-    <div class="particle-field"></div>
+    <div class="machine-particles"></div>
   `;
 
-  document.body.appendChild(cinematicLayer);
+  document.body.appendChild(machine);
 
-  const telemetryTemp = document.querySelector("#telemetryTemp");
-  const telemetryPower = document.querySelector("#telemetryPower");
-  const telemetryLink = document.querySelector("#telemetryLink");
-  const targetText = document.querySelector("#targetText");
+  const machineState =
+    document.querySelector("#machineState");
+
+  const particleContainer =
+    document.querySelector(".machine-particles");
 
   /* =========================================================
-     PARTICLE SYSTEM
+     PARTICLES
   ========================================================= */
 
-  const particleField = document.querySelector(".particle-field");
+  for (let i = 0; i < 70; i++) {
+    const p = document.createElement("span");
 
-  for (let i = 0; i < 90; i++) {
+    p.className = "machine-particle";
 
-    const particle = document.createElement("span");
+    p.style.setProperty("--px", `${Math.random() * 100}vw`);
+    p.style.setProperty("--py", `${Math.random() * 100}vh`);
+    p.style.setProperty("--delay", `${Math.random() * 2}s`);
+    p.style.setProperty("--size", `${1 + Math.random() * 3}px`);
 
-    particle.className = "relay-particle";
-
-    particle.style.left = `${Math.random() * 100}%`;
-    particle.style.top = `${Math.random() * 100}%`;
-
-    particle.style.animationDelay =
-      `${Math.random() * 8}s`;
-
-    particle.style.animationDuration =
-      `${5 + Math.random() * 9}s`;
-
-    particle.style.setProperty(
-      "--particle-size",
-      `${1 + Math.random() * 3}px`
-    );
-
-    particleField.appendChild(particle);
+    particleContainer.appendChild(p);
   }
 
   /* =========================================================
-     TELEMETRY
+     AUDIO
   ========================================================= */
 
-  function updateTelemetry(power, link) {
-
-    telemetryPower.textContent =
-      String(Math.round(power)).padStart(3, "0");
-
-    telemetryTemp.textContent =
-      (27 + power * 0.18 + Math.random() * 2).toFixed(1);
-
-    telemetryLink.textContent = link;
-  }
-
-  /* =========================================================
-     SYSTEM STATE
-  ========================================================= */
-
-  function setState(state) {
-
-    currentState = state;
-
-    document.body.dataset.relayState =
-      state.toLowerCase();
-
-    cinematicLayer.dataset.state =
-      state.toLowerCase();
-
-    if (state === "IDLE") {
-      updateTelemetry(18, "STANDBY");
-    }
-
-    if (state === "TARGETING") {
-      updateTelemetry(34, "LOCKING");
-    }
-
-    if (state === "CHARGING") {
-      updateTelemetry(68, "CHARGING");
-    }
-
-    if (state === "TRANSMITTING") {
-      updateTelemetry(94, "TRANSMIT");
-    }
-
-    if (state === "SUCCESS") {
-      updateTelemetry(100, "ONLINE");
-    }
-
-    if (state === "FAILURE") {
-      updateTelemetry(12, "ERROR");
-    }
-  }
-
-  /* =========================================================
-     TARGET SYSTEM
-  ========================================================= */
-
-  function lockTarget(url) {
-
-    targetText.textContent =
-      "TARGET // " + url.replace(/^https?:\/\//, "").slice(0, 38);
-
-    cinematicLayer.classList.add("target-active");
-
-    setTimeout(() => {
-      cinematicLayer.classList.add("target-locked");
-    }, 850);
-  }
-
-  function clearTarget() {
-
-    cinematicLayer.classList.remove(
-      "target-active",
-      "target-locked"
-    );
-
-    targetText.textContent = "NO TARGET";
-  }
-
-  /* =========================================================
-     ENERGY BURST
-  ========================================================= */
-
-  function energyBurst(type = "success") {
-
-    cinematicLayer.classList.remove(
-      "burst-success",
-      "burst-error"
-    );
-
-    void cinematicLayer.offsetWidth;
-
-    cinematicLayer.classList.add(
-      type === "success"
-        ? "burst-success"
-        : "burst-error"
-    );
-  }
-
-  /* =========================================================
-     CYBER AUDIO
-  ========================================================= */
-
-  function startCyberAudio() {
-
+  function startAudio() {
     if (ambientStarted) return;
 
     try {
-
       audioContext =
         new (window.AudioContext ||
           window.webkitAudioContext)();
 
-      masterGain =
-        audioContext.createGain();
-
+      masterGain = audioContext.createGain();
       masterGain.gain.value = 0.035;
+      masterGain.connect(audioContext.destination);
 
-      masterGain.connect(
-        audioContext.destination
-      );
-
-      const drone =
-        audioContext.createOscillator();
-
-      const droneGain =
-        audioContext.createGain();
+      const drone = audioContext.createOscillator();
+      const gain = audioContext.createGain();
 
       drone.type = "sine";
-      drone.frequency.value = 55;
-      droneGain.gain.value = 0.12;
+      drone.frequency.value = 48;
+      gain.gain.value = 0.1;
 
-      drone.connect(droneGain);
-      droneGain.connect(masterGain);
-
+      drone.connect(gain);
+      gain.connect(masterGain);
       drone.start();
 
-      const atmosphere =
-        audioContext.createOscillator();
-
-      const atmosphereGain =
-        audioContext.createGain();
-
-      atmosphere.type = "triangle";
-      atmosphere.frequency.value = 110;
-      atmosphereGain.gain.value = 0.035;
-
-      atmosphere.connect(atmosphereGain);
-      atmosphereGain.connect(masterGain);
-
-      atmosphere.start();
-
-      const lfo =
-        audioContext.createOscillator();
-
-      const lfoGain =
-        audioContext.createGain();
-
-      lfo.frequency.value = 0.08;
-      lfoGain.gain.value = 8;
-
-      lfo.connect(lfoGain);
-      lfoGain.connect(atmosphere.frequency);
-
-      lfo.start();
-
       ambientStarted = true;
-
-    } catch (error) {
-
-      console.log(
-        "Cyber audio unavailable:",
-        error
-      );
+    } catch (e) {
+      console.log("Audio unavailable");
     }
   }
 
-  function playTone(
-    frequency,
-    duration = 0.25,
-    volume = 0.12
-  ) {
-
+  function tone(freq, duration = .2, volume = .1) {
     if (!audioContext || !masterGain) return;
 
-    const now =
-      audioContext.currentTime;
+    const now = audioContext.currentTime;
 
-    const oscillator =
-      audioContext.createOscillator();
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-    const gain =
-      audioContext.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(freq, now);
 
-    oscillator.type = "sine";
-
-    oscillator.frequency.setValueAtTime(
-      frequency,
-      now
-    );
-
-    gain.gain.setValueAtTime(
-      0,
-      now
-    );
-
+    gain.gain.setValueAtTime(0, now);
     gain.gain.linearRampToValueAtTime(
       volume,
-      now + 0.02
+      now + .015
     );
 
     gain.gain.exponentialRampToValueAtTime(
-      0.001,
+      .001,
       now + duration
     );
 
-    oscillator.connect(gain);
+    osc.connect(gain);
     gain.connect(masterGain);
 
-    oscillator.start(now);
-    oscillator.stop(now + duration + 0.05);
-  }
-
-  function playEntrySound() {
-
-    [
-      130.81,
-      196.00,
-      261.63,
-      392.00,
-      523.25
-    ].forEach((frequency, index) => {
-
-      setTimeout(() => {
-        playTone(
-          frequency,
-          .6,
-          .14
-        );
-      }, index * 80);
-
-    });
-  }
-
-  function playLockSound() {
-
-    playTone(220, .15, .08);
-
-    setTimeout(() => {
-      playTone(440, .18, .1);
-    }, 100);
-
-  }
-
-  function playSuccessSound() {
-
-    [
-      261.63,
-      329.63,
-      392,
-      523.25,
-      659.25
-    ].forEach((frequency, index) => {
-
-      setTimeout(() => {
-        playTone(
-          frequency,
-          .55,
-          .12
-        );
-      }, index * 65);
-
-    });
-  }
-
-  function playErrorSound() {
-
-    playTone(110, .4, .15);
-
-    setTimeout(() => {
-      playTone(82.41, .5, .12);
-    }, 180);
-
+    osc.start(now);
+    osc.stop(now + duration + .05);
   }
 
   /* =========================================================
-     PARTICLE BURST
+     MACHINE STATE
   ========================================================= */
 
-  function particleExplosion() {
+  function machineStateSet(state) {
+    machine.dataset.state = state;
+    document.body.dataset.relayState = state;
 
-    for (let i = 0; i < 35; i++) {
+    machineState.textContent = state.toUpperCase();
 
-      const particle =
-        document.createElement("span");
+    if (state === "targeting") {
+      tone(180, .18, .07);
+    }
 
-      particle.className =
-        "burst-particle";
+    if (state === "charging") {
+      tone(260, .3, .1);
+      setTimeout(() => tone(520, .25, .08), 150);
+    }
 
-      const angle =
-        Math.random() * Math.PI * 2;
+    if (state === "transmitting") {
+      tone(720, .4, .12);
+    }
 
-      const distance =
-        150 + Math.random() * 450;
+    if (state === "success") {
+      tone(440, .2, .12);
+      setTimeout(() => tone(660, .3, .12), 100);
+      setTimeout(() => tone(880, .45, .1), 220);
+    }
 
-      particle.style.setProperty(
+    if (state === "failure") {
+      tone(90, .4, .15);
+    }
+  }
+
+  /* =========================================================
+     TRANSFORMATION PHASES
+  ========================================================= */
+
+  function phaseTarget() {
+    machine.classList.remove(
+      "transform-charge",
+      "transform-transmit",
+      "transform-success",
+      "transform-failure"
+    );
+
+    machine.classList.add("transform-target");
+
+    machineStateSet("targeting");
+  }
+
+  function phaseCharge() {
+    machine.classList.remove(
+      "transform-target",
+      "transform-transmit"
+    );
+
+    machine.classList.add("transform-charge");
+
+    machineStateSet("charging");
+  }
+
+  function phaseTransmit() {
+    machine.classList.remove(
+      "transform-target",
+      "transform-charge"
+    );
+
+    machine.classList.add("transform-transmit");
+
+    machineStateSet("transmitting");
+  }
+
+  function phaseSuccess() {
+    machine.classList.remove(
+      "transform-target",
+      "transform-charge",
+      "transform-transmit"
+    );
+
+    machine.classList.add("transform-success");
+
+    machineStateSet("success");
+
+    impact();
+  }
+
+  function phaseFailure() {
+    machine.classList.remove(
+      "transform-target",
+      "transform-charge",
+      "transform-transmit"
+    );
+
+    machine.classList.add("transform-failure");
+
+    machineStateSet("failure");
+  }
+
+  function resetMachine() {
+    machine.classList.remove(
+      "transform-target",
+      "transform-charge",
+      "transform-transmit",
+      "transform-success",
+      "transform-failure"
+    );
+
+    machineStateSet("standby");
+  }
+
+  /* =========================================================
+     IMPACT
+  ========================================================= */
+
+  function impact() {
+    machine.classList.remove("impact");
+
+    void machine.offsetWidth;
+
+    machine.classList.add("impact");
+
+    for (let i = 0; i < 50; i++) {
+      const p = document.createElement("span");
+
+      p.className = "impact-particle";
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 200 + Math.random() * 650;
+
+      p.style.setProperty(
         "--x",
         `${Math.cos(angle) * distance}px`
       );
 
-      particle.style.setProperty(
+      p.style.setProperty(
         "--y",
         `${Math.sin(angle) * distance}px`
       );
 
-      particleField.appendChild(
-        particle
-      );
+      machine.appendChild(p);
 
-      setTimeout(() => {
-        particle.remove();
-      }, 1200);
+      setTimeout(() => p.remove(), 1100);
     }
   }
 
   /* =========================================================
-     RELAY REQUEST
+     RELAY
   ========================================================= */
 
   if (form) {
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
 
-    form.addEventListener(
-      "submit",
-      async (e) => {
+      const url = input.value.trim();
 
-        e.preventDefault();
+      if (!url) {
+        input.focus();
+        return;
+      }
 
-        const url =
-          input.value.trim();
+      startAudio();
 
-        if (!url) return;
+      if (
+        audioContext &&
+        audioContext.state === "suspended"
+      ) {
+        await audioContext.resume();
+      }
 
-        startCyberAudio();
+      /* TARGET ACQUISITION */
 
-        if (
-          audioContext &&
-          audioContext.state === "suspended"
-        ) {
-          await audioContext.resume();
+      phaseTarget();
+
+      status.textContent =
+        "TARGET ACQUISITION // LOCKING";
+
+      await wait(900);
+
+      /* MECHANICAL CHARGE */
+
+      phaseCharge();
+
+      status.textContent =
+        "RELAY CORE // CHARGING";
+
+      await wait(1200);
+
+      /* TRANSMISSION */
+
+      phaseTransmit();
+
+      status.textContent =
+        "RELAY CHANNEL // TRANSMITTING";
+
+      await wait(350);
+
+      try {
+        const response = await fetch("/api/fetch", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ url })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "Request failed."
+          );
         }
 
-        /* TARGETING */
+        /* SUCCESS */
 
-        setState("TARGETING");
-
-        status.textContent =
-          "Acquiring destination...";
-
-        lockTarget(url);
-
-        playLockSound();
-
-        await wait(850);
-
-        /* CHARGING */
-
-        setState("CHARGING");
+        phaseSuccess();
 
         status.textContent =
-          "Charging relay core...";
+          `CONNECTED // HTTP ${data.status}`;
 
-        await wait(950);
+        resultTitle.textContent =
+          `HTTP ${data.status}`;
 
-        /* TRANSMITTING */
-
-        setState("TRANSMITTING");
-
-        status.textContent =
-          "Opening secure channel...";
-
-        try {
-
-          const response =
-            await fetch(
-              "/api/fetch",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body: JSON.stringify({
-                  url
-                })
-              }
-            );
-
-          const data =
-            await response.json();
-
-          if (!response.ok) {
-            throw new Error(
-              data.error ||
-              "Request failed."
-            );
-          }
-
-          /* SUCCESS */
-
-          setState("SUCCESS");
-
-          status.textContent =
-            `Connected — HTTP ${data.status}`;
-
-          resultTitle.textContent =
-            `HTTP ${data.status}`;
-
-          resultBody.textContent =
+        resultBody.textContent =
 `URL: ${data.finalUrl}
 Status: ${data.status} ${data.statusText}
 Content-Type: ${data.contentType || "unknown"}
@@ -534,41 +380,42 @@ Response time: ${data.responseTime}
 Preview:
 ${data.preview}`;
 
+        /*
+          The result card is deliberately delayed.
+          The machine finishes transforming FIRST.
+        */
+
+        await wait(420);
+
+        resultCard.classList.remove("hidden");
+
+        resultCard.classList.add(
+          "result-materializing"
+        );
+
+        setTimeout(() => {
           resultCard.classList.remove(
-            "hidden"
+            "result-materializing"
           );
+        }, 1000);
 
-          energyBurst("success");
-          particleExplosion();
-          playSuccessSound();
+        await wait(2200);
 
-          await wait(1800);
+        resetMachine();
 
-          cinematicLayer.classList.remove(
-            "target-active",
-            "target-locked"
-          );
+      } catch (err) {
 
-        } catch (err) {
+        phaseFailure();
 
-          setState("FAILURE");
+        status.textContent =
+          err.message ||
+          "RELAY FAILURE";
 
-          status.textContent =
-            err.message ||
-            "Request failed.";
+        await wait(1000);
 
-          energyBurst("error");
-          particleExplosion();
-          playErrorSound();
-
-          await wait(1200);
-
-          setState("IDLE");
-          clearTarget();
-        }
-
+        resetMachine();
       }
-    );
+    });
   }
 
   /* =========================================================
@@ -576,126 +423,79 @@ ${data.preview}`;
   ========================================================= */
 
   if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(
+          resultBody.textContent
+        );
 
-    copyBtn.addEventListener(
-      "click",
-      async () => {
+        copyBtn.textContent = "COPIED";
 
-        try {
+        tone(660, .2, .08);
 
-          await navigator.clipboard.writeText(
-            resultBody.textContent
-          );
+        setTimeout(() => {
+          copyBtn.textContent = "COPY";
+        }, 1200);
 
-          copyBtn.textContent =
-            "COPIED";
+      } catch {
+        copyBtn.textContent = "FAILED";
 
-          playTone(
-            660,
-            .25,
-            .08
-          );
-
-          setTimeout(() => {
-            copyBtn.textContent =
-              "COPY";
-          }, 1200);
-
-        } catch {
-
-          copyBtn.textContent =
-            "FAILED";
-
-          setTimeout(() => {
-            copyBtn.textContent =
-              "COPY";
-          }, 1200);
-        }
-
+        setTimeout(() => {
+          copyBtn.textContent = "COPY";
+        }, 1200);
       }
-    );
+    });
   }
 
   /* =========================================================
-     BOOT SEQUENCE
+     BOOT
   ========================================================= */
 
   if (enterButton) {
+    enterButton.addEventListener("click", async () => {
 
-    enterButton.addEventListener(
-      "click",
-      async () => {
+      if (
+        bootScreen.classList.contains("launching")
+      ) {
+        return;
+      }
 
-        if (
-          bootScreen.classList.contains(
-            "launching"
-          )
-        ) {
-          return;
-        }
+      startAudio();
 
-        startCyberAudio();
+      if (
+        audioContext &&
+        audioContext.state === "suspended"
+      ) {
+        await audioContext.resume();
+      }
 
-        if (
-          audioContext &&
-          audioContext.state === "suspended"
-        ) {
-          await audioContext.resume();
-        }
+      bootScreen.classList.add("launching");
 
-        playEntrySound();
+      enterButton.disabled = true;
+      enterButton.style.pointerEvents = "none";
 
-        bootScreen.classList.add(
-          "launching"
+      setTimeout(() => {
+
+        bootScreen.classList.add("boot-hidden");
+
+        app.classList.add("app-visible");
+        app.classList.add("search-arrival");
+
+        resetMachine();
+
+        console.log(
+          "NEON RELAY // MACHINE ONLINE"
         );
 
-        enterButton.disabled = true;
-        enterButton.style.pointerEvents =
-          "none";
-
-        setTimeout(() => {
-
-          bootScreen.classList.add(
-            "boot-hidden"
-          );
-
-          app.classList.add(
-            "app-visible"
-          );
-
-          app.classList.add(
-            "search-arrival"
-          );
-
-          setState("IDLE");
-
-          console.log(
-            "NEON RELAY // SYSTEM ONLINE"
-          );
-
-        }, 5200);
-
-      }
-    );
-
+      }, 5200);
+    });
   }
 
-  /* =========================================================
-     UTILITY
-  ========================================================= */
-
   function wait(ms) {
-
     return new Promise(resolve =>
       setTimeout(resolve, ms)
     );
-
   }
 
-  /* =========================================================
-     INITIAL STATE
-  ========================================================= */
-
-  setState("IDLE");
-
+  resetMachine();
 });
