@@ -1727,37 +1727,44 @@ footer {
 /* Eight directions */
 
 .chain-1 {
+  --chain-angle: 0deg;
   transform: rotate(0deg) translateX(-115px);
 }
 
 .chain-2 {
+  --chain-angle: 45deg;
   transform: rotate(45deg) translateX(-115px);
 }
 
 .chain-3 {
+  --chain-angle: 90deg;
   transform: rotate(90deg) translateX(-115px);
 }
 
 .chain-4 {
+  --chain-angle: 135deg;
   transform: rotate(135deg) translateX(-115px);
 }
 
 .chain-5 {
+  --chain-angle: 180deg;
   transform: rotate(180deg) translateX(-115px);
 }
 
 .chain-6 {
+  --chain-angle: 225deg;
   transform: rotate(225deg) translateX(-115px);
 }
 
 .chain-7 {
+  --chain-angle: 270deg;
   transform: rotate(270deg) translateX(-115px);
 }
 
 .chain-8 {
+  --chain-angle: 315deg;
   transform: rotate(315deg) translateX(-115px);
 }
-
 
 @keyframes chainPulse {
 
