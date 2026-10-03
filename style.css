@@ -2406,3 +2406,805 @@ footer span:first-child {
     scroll-behavior: auto !important;
   }
 }
+/* =========================================================
+   NEON RELAY — CINEMATIC TRANSFORMATION ENGINE
+   HUD / TARGET LOCK / ENERGY BURSTS / PARTICLES
+   ========================================================= */
+
+#cinematicLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .7s ease;
+  --state: #00f6ff;
+}
+
+/* Only activate the cinematic layer once the main app is visible */
+#app.app-visible ~ #cinematicLayer {
+  opacity: 1;
+}
+
+/* =========================================================
+   GLOBAL HUD
+   ========================================================= */
+
+.hud-crosshair {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 170px;
+  height: 170px;
+  transform: translate(-50%, -50%) scale(.65);
+  opacity: .12;
+  transition:
+    transform .8s cubic-bezier(.16,1,.3,1),
+    opacity .5s ease;
+}
+
+.crosshair-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--state);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px var(--state),
+    inset 0 0 18px color-mix(in srgb, var(--state) 25%, transparent);
+}
+
+.ring-a {
+  animation: crosshairSpin 7s linear infinite;
+}
+
+.ring-b {
+  inset: 18px;
+  border-style: dashed;
+  opacity: .55;
+  animation: crosshairSpinReverse 4s linear infinite;
+}
+
+.crosshair-center {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--state);
+  box-shadow:
+    0 0 8px var(--state),
+    0 0 28px var(--state),
+    0 0 55px var(--state);
+}
+
+.crosshair-label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 16px);
+  transform: translateX(-50%);
+  color: var(--state);
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 4px;
+  white-space: nowrap;
+  text-shadow: 0 0 10px var(--state);
+}
+
+/* =========================================================
+   HUD CORNERS
+   ========================================================= */
+
+.hud-corners {
+  position: fixed;
+  inset: 28px;
+}
+
+.hud-corner {
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  border-color: var(--state);
+  opacity: .35;
+  transition: opacity .4s ease, transform .5s ease;
+}
+
+.hc1 {
+  top: 0;
+  left: 0;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.hc2 {
+  top: 0;
+  right: 0;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+
+.hc3 {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.hc4 {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* =========================================================
+   TELEMETRY
+   ========================================================= */
+
+.telemetry {
+  position: fixed;
+  top: 38px;
+  right: 42px;
+  display: flex;
+  gap: 22px;
+  color: rgba(220,250,255,.55);
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-right: 1px solid var(--state);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+}
+
+.telemetry b {
+  color: var(--state);
+  text-shadow: 0 0 10px var(--state);
+}
+
+/* =========================================================
+   TARGET LOCK
+   ========================================================= */
+
+.target-lock {
+  position: fixed;
+  left: 50%;
+  top: 48%;
+  width: min(700px, 78vw);
+  height: 190px;
+  transform: translate(-50%, -50%) scale(.72);
+  opacity: 0;
+  transition:
+    opacity .45s ease,
+    transform .7s cubic-bezier(.16,1,.3,1);
+}
+
+.target-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--state);
+  box-shadow:
+    0 0 10px var(--state),
+    0 0 25px var(--state);
+  transition: width .8s cubic-bezier(.16,1,.3,1);
+}
+
+.target-bracket {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-color: var(--state);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--state) 65%, transparent);
+}
+
+.bracket-tl {
+  top: 0;
+  left: 0;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.bracket-tr {
+  top: 0;
+  right: 0;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.bracket-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.bracket-br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+#targetText {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 75%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--state);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px var(--state);
+}
+
+.target-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.target-active .target-line {
+  width: 100%;
+}
+
+.target-active .target-bracket {
+  animation: bracketPulse 1s ease-in-out infinite;
+}
+
+.target-locked {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.target-locked .target-line {
+  box-shadow:
+    0 0 12px var(--state),
+    0 0 35px var(--state),
+    0 0 70px var(--state);
+}
+
+.target-locked .target-bracket {
+  animation: bracketLock .45s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* =========================================================
+   ENERGY BURST
+   ========================================================= */
+
+.energy-burst {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--state);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  background: var(--state);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.burst-success .energy-burst {
+  animation: reactorBurst .95s cubic-bezier(.16,1,.3,1);
+}
+
+.burst-success .screen-flash {
+  animation: successFlash .6s ease-out;
+}
+
+.burst-error .energy-burst {
+  animation: errorBurst .65s ease-out;
+}
+
+.burst-error .screen-flash {
+  animation: errorFlash .4s ease-out;
+}
+
+/* =========================================================
+   PARTICLE FIELD
+   ========================================================= */
+
+.particle-field {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.relay-particle {
+  position: absolute;
+  left: var(--px);
+  top: var(--py);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--state);
+  box-shadow:
+    0 0 5px var(--state),
+    0 0 12px var(--state);
+  opacity: .25;
+  animation:
+    particleFloat var(--duration) ease-in-out var(--delay) infinite alternate;
+}
+
+.burst-particle {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--state);
+  box-shadow:
+    0 0 8px var(--state),
+    0 0 20px var(--state);
+  transform: translate(-50%, -50%);
+  animation: particleExplosion 1.1s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* =========================================================
+   STATE COLORS
+   ========================================================= */
+
+#cinematicLayer[data-state="idle"] {
+  --state: #00f6ff;
+}
+
+#cinematicLayer[data-state="targeting"] {
+  --state: #00eaff;
+}
+
+#cinematicLayer[data-state="charging"] {
+  --state: #9b5cff;
+}
+
+#cinematicLayer[data-state="transmitting"] {
+  --state: #ff3df2;
+}
+
+#cinematicLayer[data-state="success"] {
+  --state: #39ff91;
+}
+
+#cinematicLayer[data-state="failure"] {
+  --state: #ff315c;
+}
+
+/* =========================================================
+   TARGETING MODE
+   ========================================================= */
+
+#cinematicLayer[data-state="targeting"] .hud-crosshair {
+  opacity: .9;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#cinematicLayer[data-state="targeting"] .hud-corner {
+  opacity: .8;
+  animation: cornerPulse 1.1s ease-in-out infinite alternate;
+}
+
+#cinematicLayer[data-state="targeting"] .telemetry {
+  animation: telemetryFlicker .8s steps(2) infinite;
+}
+
+/* =========================================================
+   CHARGING MODE
+   ========================================================= */
+
+#cinematicLayer[data-state="charging"] .hud-crosshair {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+#cinematicLayer[data-state="charging"] .ring-a {
+  animation-duration: 1.1s;
+}
+
+#cinematicLayer[data-state="charging"] .ring-b {
+  animation-duration: .55s;
+}
+
+#cinematicLayer[data-state="charging"] .crosshair-center {
+  animation: coreCharge .4s ease-in-out infinite alternate;
+}
+
+#cinematicLayer[data-state="charging"] .target-bracket {
+  animation:
+    bracketPulse .35s ease-in-out infinite alternate,
+    bracketShake .15s linear infinite;
+}
+
+/* =========================================================
+   TRANSMITTING MODE
+   ========================================================= */
+
+#cinematicLayer[data-state="transmitting"] .hud-crosshair {
+  opacity: .95;
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+#cinematicLayer[data-state="transmitting"] .crosshair-ring {
+  box-shadow:
+    0 0 18px var(--state),
+    0 0 45px var(--state),
+    inset 0 0 35px color-mix(in srgb, var(--state) 35%, transparent);
+}
+
+#cinematicLayer[data-state="transmitting"] .target-lock {
+  animation: transmissionLock .6s ease-in-out infinite alternate;
+}
+
+#cinematicLayer[data-state="transmitting"] .relay-particle {
+  animation:
+    particleTransmission .45s linear var(--delay) infinite;
+}
+
+/* =========================================================
+   SUCCESS MODE
+   ========================================================= */
+
+#cinematicLayer[data-state="success"] .hud-crosshair {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.9);
+}
+
+#cinematicLayer[data-state="success"] .crosshair-center {
+  animation: successCore .7s ease-out;
+}
+
+#cinematicLayer[data-state="success"] .hud-corner {
+  opacity: 1;
+  animation: successCorners .8s ease-out;
+}
+
+/* =========================================================
+   FAILURE MODE
+   ========================================================= */
+
+#cinematicLayer[data-state="failure"] {
+  --state: #ff315c;
+}
+
+#cinematicLayer[data-state="failure"] .hud-crosshair {
+  opacity: 1;
+  animation: failureShake .12s linear infinite;
+}
+
+#cinematicLayer[data-state="failure"] .hud-corner {
+  animation: failurePulse .2s ease-in-out infinite alternate;
+}
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes crosshairSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes crosshairSpinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes bracketPulse {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(2.5);
+  }
+}
+
+@keyframes bracketLock {
+  0% {
+    transform: scale(1.5);
+    opacity: .2;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bracketShake {
+  0% {
+    transform: translateX(-1px);
+  }
+  50% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes cornerPulse {
+  from {
+    opacity: .3;
+    filter: brightness(1);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(2);
+  }
+}
+
+@keyframes telemetryFlicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .45;
+  }
+}
+
+@keyframes coreCharge {
+  from {
+    transform: translate(-50%, -50%) scale(.7);
+    box-shadow:
+      0 0 8px var(--state),
+      0 0 25px var(--state);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(2.3);
+    box-shadow:
+      0 0 15px var(--state),
+      0 0 50px var(--state),
+      0 0 90px var(--state);
+  }
+}
+
+@keyframes transmissionLock {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate3d(0,0,0);
+    opacity: .1;
+  }
+  50% {
+    opacity: .6;
+  }
+  100% {
+    transform: translate3d(
+      calc(var(--drift-x) * 1px),
+      calc(var(--drift-y) * 1px),
+      0
+    );
+    opacity: .15;
+  }
+}
+
+@keyframes particleTransmission {
+  0% {
+    transform: translate(0,0) scale(1);
+    opacity: .15;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc((50vw - var(--px)) * .75),
+      calc((50vh - var(--py)) * .75)
+    ) scale(.1);
+    opacity: 0;
+  }
+}
+
+@keyframes particleExplosion {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform:
+      translate(
+        calc(-50% + var(--x)),
+        calc(-50% + var(--y))
+      )
+      scale(.1);
+    opacity: 0;
+  }
+}
+
+@keyframes reactorBurst {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    border-width: 4px;
+  }
+
+  55% {
+    opacity: .8;
+  }
+
+  100% {
+    width: 130vw;
+    height: 130vw;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@keyframes successFlash {
+  0% {
+    opacity: 0;
+  }
+
+  12% {
+    opacity: .45;
+  }
+
+  30% {
+    opacity: .08;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes errorBurst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(18);
+    opacity: 0;
+  }
+}
+
+@keyframes errorFlash {
+  0% {
+    opacity: 0;
+  }
+
+  15% {
+    opacity: .35;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes successCore {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  40% {
+    transform: translate(-50%, -50%) scale(4);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes successCorners {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes failureShake {
+  0% {
+    transform: translate(-50%, -50%) translateX(-3px);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateX(3px);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translateX(-3px);
+  }
+}
+
+@keyframes failurePulse {
+  from {
+    opacity: .3;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .hud-corners {
+    inset: 14px;
+  }
+
+  .hud-corner {
+    width: 45px;
+    height: 45px;
+  }
+
+  .telemetry {
+    top: 20px;
+    right: 20px;
+    gap: 8px;
+    font-size: 7px;
+    max-width: 65vw;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .hud-crosshair {
+    width: 120px;
+    height: 120px;
+  }
+
+  .target-lock {
+    width: 82vw;
+    height: 150px;
+  }
+
+  #targetText {
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   PERFORMANCE
+   ========================================================= */
+
+#cinematicLayer *,
+#cinematicLayer *::before,
+#cinematicLayer *::after {
+  will-change: transform, opacity;
+}
