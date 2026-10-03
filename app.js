@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================================================
-     NEON RELAY // MAIN ELEMENTS
-     ========================================================= */
-
   const form = document.querySelector("#relayForm");
   const input = document.querySelector("#url");
   const status = document.querySelector("#status");
@@ -16,15 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const enterButton = document.querySelector("#enterButton");
   const app = document.querySelector("#app");
 
-
-  /* =========================================================
-     RELAY SYSTEM
-     ========================================================= */
-
   if (form) {
-
     form.addEventListener("submit", async (e) => {
-
       e.preventDefault();
 
       const url = input.value.trim();
@@ -33,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
       resultCard.classList.add("hidden");
 
       try {
-
         const response = await fetch("/api/fetch", {
           method: "POST",
           headers: {
@@ -48,11 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error(data.error || "Request failed.");
         }
 
-        status.textContent =
-          `Connected — HTTP ${data.status}`;
-
-        resultTitle.textContent =
-          `HTTP ${data.status}`;
+        status.textContent = `Connected — HTTP ${data.status}`;
+        resultTitle.textContent = `HTTP ${data.status}`;
 
         resultBody.textContent =
 `URL: ${data.finalUrl}
@@ -67,30 +52,15 @@ ${data.preview}`;
         resultCard.classList.remove("hidden");
 
       } catch (err) {
-
-        status.textContent =
-          err.message || "Request failed.";
-
+        status.textContent = err.message || "Request failed.";
       }
-
     });
-
   }
 
-
-  /* =========================================================
-     COPY BUTTON
-     ========================================================= */
-
   if (copyBtn) {
-
     copyBtn.addEventListener("click", async () => {
-
       try {
-
-        await navigator.clipboard.writeText(
-          resultBody.textContent
-        );
+        await navigator.clipboard.writeText(resultBody.textContent);
 
         copyBtn.textContent = "COPIED";
 
@@ -99,54 +69,32 @@ ${data.preview}`;
         }, 1200);
 
       } catch {
-
         copyBtn.textContent = "FAILED";
 
         setTimeout(() => {
           copyBtn.textContent = "COPY";
         }, 1200);
-
       }
-
     });
-
   }
-
-
-  /* =========================================================
-     CYBER AUDIO
-     ========================================================= */
 
   let audioContext = null;
   let masterGain = null;
   let ambientStarted = false;
 
-
   function startCyberAudio() {
-
     if (ambientStarted) return;
 
     try {
-
       audioContext =
-        new (window.AudioContext ||
-          window.webkitAudioContext)();
+        new (window.AudioContext || window.webkitAudioContext)();
 
-      masterGain =
-        audioContext.createGain();
-
+      masterGain = audioContext.createGain();
       masterGain.gain.value = 0.035;
+      masterGain.connect(audioContext.destination);
 
-      masterGain.connect(
-        audioContext.destination
-      );
-
-
-      const drone =
-        audioContext.createOscillator();
-
-      const droneGain =
-        audioContext.createGain();
+      const drone = audioContext.createOscillator();
+      const droneGain = audioContext.createGain();
 
       drone.type = "sine";
       drone.frequency.value = 55;
@@ -154,15 +102,10 @@ ${data.preview}`;
 
       drone.connect(droneGain);
       droneGain.connect(masterGain);
-
       drone.start();
 
-
-      const atmosphere =
-        audioContext.createOscillator();
-
-      const atmosphereGain =
-        audioContext.createGain();
+      const atmosphere = audioContext.createOscillator();
+      const atmosphereGain = audioContext.createGain();
 
       atmosphere.type = "triangle";
       atmosphere.frequency.value = 110;
@@ -170,52 +113,29 @@ ${data.preview}`;
 
       atmosphere.connect(atmosphereGain);
       atmosphereGain.connect(masterGain);
-
       atmosphere.start();
 
-
-      const lfo =
-        audioContext.createOscillator();
-
-      const lfoGain =
-        audioContext.createGain();
+      const lfo = audioContext.createOscillator();
+      const lfoGain = audioContext.createGain();
 
       lfo.frequency.value = 0.08;
       lfoGain.gain.value = 8;
 
       lfo.connect(lfoGain);
-      lfoGain.connect(
-        atmosphere.frequency
-      );
-
+      lfoGain.connect(atmosphere.frequency);
       lfo.start();
 
       ambientStarted = true;
 
     } catch (error) {
-
-      console.log(
-        "Cyber audio unavailable:",
-        error
-      );
-
+      console.log("Cyber audio unavailable:", error);
     }
-
   }
 
-
-  /* =========================================================
-     ENTRY SOUND
-     ========================================================= */
-
   function playEntrySound() {
+    if (!audioContext || !masterGain) return;
 
-    if (!audioContext || !masterGain) {
-      return;
-    }
-
-    const now =
-      audioContext.currentTime;
+    const now = audioContext.currentTime;
 
     const notes = [
       130.81,
@@ -227,26 +147,18 @@ ${data.preview}`;
 
     notes.forEach((frequency, index) => {
 
-      const oscillator =
-        audioContext.createOscillator();
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
 
-      const gain =
-        audioContext.createGain();
-
-      const start =
-        now + index * 0.08;
+      const start = now + index * 0.08;
 
       oscillator.type = "sine";
-
       oscillator.frequency.setValueAtTime(
         frequency,
         start
       );
 
-      gain.gain.setValueAtTime(
-        0,
-        start
-      );
+      gain.gain.setValueAtTime(0, start);
 
       gain.gain.linearRampToValueAtTime(
         0.15,
@@ -263,85 +175,43 @@ ${data.preview}`;
 
       oscillator.start(start);
       oscillator.stop(start + 0.7);
-
     });
-
   }
-
-
-  /* =========================================================
-     INITIALIZE RELAY
-     ========================================================= */
 
   if (enterButton) {
 
     enterButton.addEventListener("click", async () => {
 
-      console.log(
-        "NEON RELAY: INITIALIZE CLICKED"
-      );
+      console.log("NEON RELAY: INITIALIZE CLICKED");
 
-      // Prevent double-clicking
-      if (
-        bootScreen.classList.contains(
-          "launching"
-        )
-      ) {
+      if (bootScreen.classList.contains("launching")) {
         return;
       }
 
-      // Start audio
       startCyberAudio();
 
-      if (audioContext &&
-          audioContext.state === "suspended") {
-
+      if (
+        audioContext &&
+        audioContext.state === "suspended"
+      ) {
         await audioContext.resume();
-
       }
 
       playEntrySound();
 
+      bootScreen.classList.add("launching");
 
-      // Start cinematic sequence
-      bootScreen.classList.add(
-        "launching"
-      );
-
-
-      // Button feedback
       enterButton.disabled = true;
-      enterButton.style.pointerEvents =
-        "none";
-
-
-      /*
-        CINEMATIC TIMELINE
-
-        0s    chains break
-        0s    vortex begins
-        1.2s  orb disappears
-        5s    vortex journey finishes
-        5.2s search interface appears
-      */
+      enterButton.style.pointerEvents = "none";
 
       setTimeout(() => {
 
-        bootScreen.classList.add(
-          "boot-hidden"
-        );
+        bootScreen.classList.add("boot-hidden");
 
-        app.classList.add(
-          "app-visible"
-        );
+        app.classList.add("app-visible");
+        app.classList.add("search-arrival");
 
-        app.classList.add(
-          "search-arrival"
-        );
-
-        console.log(
-          "NEON RELAY: SYSTEM ONLINE"
-        );
+        console.log("NEON RELAY: SYSTEM ONLINE");
 
       }, 5200);
 
