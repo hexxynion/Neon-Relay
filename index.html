@@ -1,22 +1,625 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Neon Relay</title><link rel="stylesheet" href="/style.css"/></head><body>
-<div id="bootScreen"><div class="boot-grid"></div><div class="boot-code"><span>INITIALIZING RELAY_CORE...</span><span>LOADING NEURAL INTERFACE...</span><span>ESTABLISHING SECURE CHANNEL...</span><span>SYNCING NETWORK...</span></div>
-<div class="orb-wrapper"><div class="vortex"><div class="vortex-ring vr1"></div><div class="vortex-ring vr2"></div><div class="vortex-ring vr3"></div><div class="vortex-ring vr4"></div><div class="vortex-core"></div></div>
-<div class="orb-ring ring-one"></div><div class="orb-ring ring-two"></div><div class="orb-ring ring-three"></div>
-<div class="energy-chain chain-1"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-2"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-3"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-4"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-5"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-6"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-7"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
-<div class="energy-chain chain-8"><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span><span class="chain-link"></span></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#05070c"/>
+  <title>NEON RELAY // COMMAND CORE</title>
+  <link rel="stylesheet" href="/style.css"/>
+</head>
 
-<div class="energy-orb"><div class="orb-core"></div><div class="orb-glow"></div><div class="orb-lightning lightning-one"></div><div class="orb-lightning lightning-two"></div><div class="orb-lightning lightning-three"></div></div>
-<div class="welcome"><div class="welcome-small">NEON RELAY // SYSTEM ONLINE</div><div class="welcome-title">WELCOME</div><div class="welcome-sub">ENTER THE NETWORK</div><button id="enterButton">INITIALIZE RELAY <span>↗</span></button></div></div>
-<div class="boot-status"><span class="boot-dot"></span> CONNECTION READY</div></div>
-<div id="app"><div class="code-stream"><span>010101101101</span><span>const relay = online;</span><span>ACCESS_GRANTED</span><span>0x7FF21A</span><span>CONNECTING...</span><span>NEON_CORE</span><span>0100110101</span><span>HTTP://RELAY</span><span>SECURE_CHANNEL</span></div><div class="grid"></div><div class="scanlines"></div>
-<main class="shell"><nav><div class="brand"><span class="dot"></span> NEON RELAY</div><div class="nav-status"><span class="nav-live"></span> SYSTEM ONLINE</div><div class="badge">AUTHORIZED RELAY</div></nav><section class="hero"><div class="hero-tag"><span></span> NETWORK NODE 07</div><p class="eyebrow">PRIVATE • CONTROLLED • FAST</p><h1>Relay the web.<br><span>Keep control.</span></h1><p class="sub">A sleek URL relay for domains you own or explicitly authorize. Requests are checked server-side before they leave the server.</p>
-<form id="relayForm" class="card"><div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div><label for="url">Destination URL</label><div class="inputRow"><input id="url" type="url" placeholder="https://example.com" required/><button type="submit"><span>LAUNCH</span> ↗</button></div><div class="hint"><span class="statusDot"></span><span id="status">Ready — enter an authorized URL.</span></div></form>
-<section class="result card hidden" id="resultCard"><div class="resultTop"><div><p class="eyebrow">RESPONSE</p><h2 id="resultTitle">Relay result</h2></div><button class="ghost" id="copyBtn">COPY</button></div><pre id="resultBody"></pre></section>
-<section class="searchSection card"><div class="search-glow"></div><div class="search-header"><div><p class="eyebrow">NEON SEARCH // GOOGLE CORE</p><h2>Search the web.</h2><p class="searchDescription">Query the network through Neon Relay.</p></div><div class="search-status"><span></span> SEARCH ONLINE</div></div><div class="search-container"><div class="search-inner"><div class="search-icon">⌕</div><div class="gcse-search"></div></div></div></section></section><footer><span>NEON RELAY // V1.0</span><span>ENCRYPTED NODE</span><span>ALLOWLISTED DESTINATIONS ONLY</span></footer></main></div>
-<script async src="https://cse.google.com/cse.js?cx=d67094c75fdee40ea"></script><script src="/app.js"></script></body></html>
+<body>
+
+<!-- =========================================================
+     BOOT / TRANSFORMATION SEQUENCE
+========================================================= -->
+<div id="bootScreen">
+
+  <div class="boot-grid"></div>
+  <div class="boot-scan"></div>
+
+  <div class="boot-code">
+    <span>INITIALIZING RELAY_CORE...</span>
+    <span>LOADING NEURAL INTERFACE...</span>
+    <span>ESTABLISHING SECURE CHANNEL...</span>
+    <span>SYNCING NETWORK...</span>
+    <span>CALIBRATING MACHINE SYSTEM...</span>
+    <span>CORE TRANSFORMATION READY...</span>
+  </div>
+
+  <div class="boot-hud boot-hud-left">
+    <span>NR-07</span>
+    <span>CORE: ONLINE</span>
+    <span>LINK: STABLE</span>
+  </div>
+
+  <div class="boot-hud boot-hud-right">
+    <span>MODE // RELAY</span>
+    <span>AUTH // VERIFIED</span>
+    <span>NODE // 07</span>
+  </div>
+
+  <div class="orb-wrapper">
+
+    <!-- CENTRAL REACTOR -->
+    <div class="vortex">
+      <div class="vortex-ring vr1"></div>
+      <div class="vortex-ring vr2"></div>
+      <div class="vortex-ring vr3"></div>
+      <div class="vortex-ring vr4"></div>
+      <div class="vortex-core"></div>
+    </div>
+
+    <div class="orb-ring ring-one"></div>
+    <div class="orb-ring ring-two"></div>
+    <div class="orb-ring ring-three"></div>
+
+    <!-- ENERGY ARMS -->
+    <div class="energy-chain chain-1">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-2">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-3">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-4">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-5">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-6">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-7">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <div class="energy-chain chain-8">
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span><span class="chain-link"></span>
+      <span class="chain-link"></span>
+    </div>
+
+    <!-- ENERGY CORE -->
+    <div class="energy-orb">
+      <div class="orb-core"></div>
+      <div class="orb-glow"></div>
+      <div class="orb-lightning lightning-one"></div>
+      <div class="orb-lightning lightning-two"></div>
+      <div class="orb-lightning lightning-three"></div>
+    </div>
+
+    <!-- BOOT TITLE -->
+    <div class="welcome">
+      <div class="welcome-small">
+        NEON RELAY // MACHINE CORE ONLINE
+      </div>
+
+      <div class="welcome-title">
+        NEON
+      </div>
+
+      <div class="welcome-title welcome-title-secondary">
+        RELAY
+      </div>
+
+      <div class="welcome-sub">
+        NETWORK COMMAND INTERFACE
+      </div>
+
+      <button id="enterButton">
+        <span class="button-bracket">[</span>
+        INITIALIZE RELAY
+        <span>↗</span>
+        <span class="button-bracket">]</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="boot-status">
+    <span class="boot-dot"></span>
+    CONNECTION READY
+    <span class="boot-divider"></span>
+    AWAITING PILOT INPUT
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+<div id="app">
+
+  <!-- DIGITAL ATMOSPHERE -->
+  <div class="code-stream">
+    <span>010101101101</span>
+    <span>const relay = online;</span>
+    <span>ACCESS_GRANTED</span>
+    <span>0x7FF21A</span>
+    <span>CONNECTING...</span>
+    <span>NEON_CORE</span>
+    <span>0100110101</span>
+    <span>HTTP://RELAY</span>
+    <span>SECURE_CHANNEL</span>
+    <span>NODE_07_ACTIVE</span>
+    <span>PACKET_STREAM_READY</span>
+    <span>AUTHORIZATION_OK</span>
+  </div>
+
+  <div class="grid"></div>
+  <div class="scanlines"></div>
+
+  <!-- MACHINE FRAME -->
+  <div class="machine-atmosphere"></div>
+  <div class="machine-grid"></div>
+  <div class="machine-vignette"></div>
+
+  <main class="shell">
+
+    <!-- =====================================================
+         COMMAND NAVIGATION
+    ====================================================== -->
+    <nav class="command-nav">
+
+      <div class="brand">
+        <span class="brand-core">
+          <span></span>
+        </span>
+
+        <div class="brand-text">
+          <strong>NEON RELAY</strong>
+          <small>COMMAND CORE / NR-07</small>
+        </div>
+      </div>
+
+      <div class="nav-center">
+        <span class="nav-line"></span>
+        <span>RELAY NETWORK</span>
+        <span class="nav-line"></span>
+      </div>
+
+      <div class="nav-status">
+        <span class="nav-live"></span>
+        SYSTEM ONLINE
+      </div>
+
+      <div class="badge">
+        AUTHORIZED RELAY
+      </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         MAIN MACHINE CORE
+    ====================================================== -->
+    <section class="hero">
+
+      <!-- LEFT SYSTEM TELEMETRY -->
+      <aside class="side-panel side-panel-left">
+
+        <div class="panel-label">
+          CORE STATUS
+        </div>
+
+        <div class="panel-core">
+          <div class="mini-reactor">
+            <span></span>
+          </div>
+
+          <div>
+            <strong>ONLINE</strong>
+            <small>REACTOR STABLE</small>
+          </div>
+        </div>
+
+        <div class="telemetry-row">
+          <span>POWER</span>
+          <strong>94%</strong>
+        </div>
+
+        <div class="telemetry-bar">
+          <span></span>
+        </div>
+
+        <div class="telemetry-row">
+          <span>NETWORK</span>
+          <strong>ACTIVE</strong>
+        </div>
+
+        <div class="telemetry-row">
+          <span>SECURITY</span>
+          <strong>LOCKED</strong>
+        </div>
+
+      </aside>
+
+
+      <!-- CENTER COMMAND AREA -->
+      <div class="hero-center">
+
+        <div class="hero-tag">
+          <span></span>
+          NETWORK NODE 07
+          <i></i>
+        </div>
+
+        <p class="eyebrow">
+          PRIVATE • CONTROLLED • FAST
+        </p>
+
+        <h1>
+          RELAY THE WEB.
+          <br>
+          <span>KEEP CONTROL.</span>
+        </h1>
+
+        <p class="sub">
+          A machine-grade URL relay for domains you own or explicitly
+          authorize. Every request is checked server-side before it
+          leaves the relay core.
+        </p>
+
+
+        <!-- =================================================
+             RELAY CONTROL MODULE
+        ================================================== -->
+        <form id="relayForm" class="card relay-module">
+
+          <div class="module-header">
+            <div>
+              <span class="module-id">MODULE // 01</span>
+              <strong>RELAY TARGET ACQUISITION</strong>
+            </div>
+
+            <div class="module-state">
+              <span></span>
+              READY
+            </div>
+          </div>
+
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+
+          <label for="url">
+            DESTINATION URL
+          </label>
+
+          <div class="inputRow">
+
+            <div class="input-shell">
+              <span class="input-prefix">URL://</span>
+              <input
+                id="url"
+                type="url"
+                placeholder="https://example.com"
+                autocomplete="url"
+                required
+              />
+            </div>
+
+            <button type="submit">
+              <span>LAUNCH</span>
+              <b>↗</b>
+            </button>
+
+          </div>
+
+          <div class="hint">
+            <span class="statusDot"></span>
+            <span id="status">
+              Ready — enter an authorized URL.
+            </span>
+          </div>
+
+          <div class="module-footer">
+            <span>AUTH CHECK: SERVER-SIDE</span>
+            <span>CHANNEL: ENCRYPTED</span>
+            <span>NODE: NR-07</span>
+          </div>
+
+        </form>
+
+
+        <!-- =================================================
+             RESPONSE MODULE
+        ================================================== -->
+        <section class="result card hidden" id="resultCard">
+
+          <div class="module-header">
+
+            <div>
+              <span class="module-id">MODULE // 02</span>
+              <strong>RELAY RESPONSE</strong>
+            </div>
+
+            <div class="module-state">
+              <span></span>
+              RECEIVED
+            </div>
+
+          </div>
+
+          <div class="resultTop">
+
+            <div>
+              <p class="eyebrow">RESPONSE TELEMETRY</p>
+              <h2 id="resultTitle">
+                Relay result
+              </h2>
+            </div>
+
+            <button class="ghost" id="copyBtn">
+              COPY DATA
+            </button>
+
+          </div>
+
+          <div class="result-terminal">
+            <div class="terminal-top">
+              <span>RELAY_CORE OUTPUT</span>
+              <span>STREAM ACTIVE</span>
+            </div>
+
+            <pre id="resultBody"></pre>
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SEARCH MACHINE
+        ================================================== -->
+        <section class="searchSection card">
+
+          <div class="search-glow"></div>
+
+          <div class="search-machine-grid"></div>
+
+          <div class="search-header">
+
+            <div>
+
+              <p class="eyebrow">
+                NEON SEARCH // GOOGLE CORE
+              </p>
+
+              <h2>
+                Search the web.
+              </h2>
+
+              <p class="searchDescription">
+                Query the network through the Neon Relay search core.
+              </p>
+
+            </div>
+
+            <div class="search-status">
+              <span></span>
+              SEARCH ONLINE
+            </div>
+
+          </div>
+
+
+          <div class="search-container">
+
+            <div class="search-inner">
+
+              <div class="search-icon">
+                ⌕
+              </div>
+
+              <div class="search-target">
+                <span class="target-corner tl"></span>
+                <span class="target-corner tr"></span>
+                <span class="target-corner bl"></span>
+                <span class="target-corner br"></span>
+
+                <div class="gcse-search"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="search-footer">
+
+            <span>
+              SEARCH CORE // ONLINE
+            </span>
+
+            <span>
+              GOOGLE INDEX
+            </span>
+
+            <span>
+              RESPONSE CHANNEL // READY
+            </span>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- RIGHT SYSTEM TELEMETRY -->
+      <aside class="side-panel side-panel-right">
+
+        <div class="panel-label">
+          NETWORK TELEMETRY
+        </div>
+
+        <div class="radar">
+          <div class="radar-ring r1"></div>
+          <div class="radar-ring r2"></div>
+          <div class="radar-ring r3"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-core"></div>
+        </div>
+
+        <div class="telemetry-row">
+          <span>LATENCY</span>
+          <strong>LOW</strong>
+        </div>
+
+        <div class="telemetry-row">
+          <span>PACKETS</span>
+          <strong>ACTIVE</strong>
+        </div>
+
+        <div class="telemetry-row">
+          <span>UPLINK</span>
+          <strong>STABLE</strong>
+        </div>
+
+      </aside>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOWER MACHINE STATUS
+    ====================================================== -->
+    <section class="system-strip">
+
+      <div class="system-cell">
+        <span class="system-icon">◆</span>
+        <div>
+          <small>CORE</small>
+          <strong>ONLINE</strong>
+        </div>
+      </div>
+
+      <div class="system-cell">
+        <span class="system-icon">◈</span>
+        <div>
+          <small>RELAY</small>
+          <strong>READY</strong>
+        </div>
+      </div>
+
+      <div class="system-cell">
+        <span class="system-icon">◇</span>
+        <div>
+          <small>SEARCH</small>
+          <strong>ACTIVE</strong>
+        </div>
+      </div>
+
+      <div class="system-cell">
+        <span class="system-icon">△</span>
+        <div>
+          <small>SECURITY</small>
+          <strong>LOCKED</strong>
+        </div>
+      </div>
+
+      <div class="system-cell system-cell-wide">
+        <div class="signal-bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div>
+          <small>RELAY SIGNAL</small>
+          <strong>OPTIMAL</strong>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer>
+
+      <span>
+        NEON RELAY // V1.0
+      </span>
+
+      <span>
+        ENCRYPTED NODE
+      </span>
+
+      <span>
+        ALLOWLISTED DESTINATIONS ONLY
+      </span>
+
+      <span>
+        NR-07 // COMMAND CORE
+      </span>
+
+    </footer>
+
+  </main>
+
+</div>
+
+
+<!-- =========================================================
+     GOOGLE SEARCH
+========================================================= -->
+<script
+  async
+  src="https://cse.google.com/cse.js?cx=d67094c75fdee40ea">
+</script>
+
+<!-- =========================================================
+     NEON RELAY ENGINE
+========================================================= -->
+<script src="/app.js"></script>
+
+</body>
+</html>
