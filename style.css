@@ -6042,3 +6042,589 @@ body:has(#cinematicLayer.state-failure) .relay-module{
   .system-cell{min-height:52px;}
   .welcome-title-secondary{font-size:clamp(28px,11vw,48px)!important;}
 }
+
+/* =========================================================
+   NEON RELAY // OVERDRIVE MACHINE LAYER
+   Add after the existing style.css rules.
+========================================================= */
+
+:root{
+  --od-cyan:#55f7ff;
+  --od-blue:#4b7dff;
+  --od-violet:#9b5cff;
+  --od-red:#ff405d;
+  --od-green:#55ffae;
+  --od-amber:#ffc857;
+}
+
+body{
+  --mx:50%;
+  --my:50%;
+  --machine-x:0px;
+  --machine-y:0px;
+  --machine-tilt-x:0deg;
+  --machine-tilt-y:0deg;
+  overflow-x:hidden;
+}
+
+/* Cursor-reactive technical atmosphere */
+#app::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:2;
+  opacity:.55;
+  background:
+    radial-gradient(circle 360px at var(--mx) var(--my),
+      rgba(85,247,255,.10),
+      transparent 65%),
+    radial-gradient(circle 160px at var(--mx) var(--my),
+      rgba(155,92,255,.08),
+      transparent 70%);
+  transition:opacity .25s ease;
+}
+
+/* Mechanical HUD reticle following cursor */
+#app::after{
+  content:"";
+  position:fixed;
+  left:var(--mx);
+  top:var(--my);
+  width:54px;
+  height:54px;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:999;
+  opacity:.22;
+  border:1px solid rgba(85,247,255,.6);
+  clip-path:polygon(0 0,35% 0,35% 2%,2% 2%,2% 35%,0 35%,0 0,
+                   100% 0,100% 35%,98% 35%,98% 2%,65% 2%,65% 0,
+                   100% 0,100% 100%,65% 100%,65% 98%,98% 98%,98% 65%,
+                   100% 65%,100% 100%,0 100%,0 65%,2% 65%,2% 98%,35% 98%,
+                   35% 100%,0 100%);
+  transition:left .08s linear,top .08s linear,opacity .2s;
+}
+
+/* Machine cards float microscopically with cursor */
+.shell{
+  transform:
+    translate3d(var(--machine-x),var(--machine-y),0)
+    rotateX(var(--machine-tilt-x))
+    rotateY(var(--machine-tilt-y));
+  transform-origin:center center;
+  transition:transform .18s cubic-bezier(.2,.8,.2,1);
+  will-change:transform;
+}
+
+/* Disable tilt while active relay states are firing */
+body.machine-busy .shell{
+  transition:transform .08s linear;
+}
+
+/* Hard machine edges */
+.card,
+.side-panel,
+.system-strip,
+.command-nav{
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before,
+.side-panel::before,
+.system-strip::before,
+.command-nav::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,
+      transparent 0 8%,
+      rgba(85,247,255,.035) 8.1%,
+      transparent 8.3% 91.7%,
+      rgba(85,247,255,.035) 91.9%,
+      transparent 92%),
+    linear-gradient(0deg,
+      transparent 0 92%,
+      rgba(85,247,255,.055) 92.2%,
+      transparent 92.5%);
+  opacity:.8;
+}
+
+/* Animated edge scanner */
+.card::after,
+.side-panel::after,
+.system-strip::after{
+  content:"";
+  position:absolute;
+  left:-35%;
+  top:0;
+  width:35%;
+  height:100%;
+  pointer-events:none;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(85,247,255,.12),
+    rgba(255,255,255,.18),
+    rgba(85,247,255,.06),
+    transparent
+  );
+  transform:skewX(-18deg);
+  animation:odEdgeSweep 7s linear infinite;
+}
+
+@keyframes odEdgeSweep{
+  0%,65%{left:-35%;opacity:0}
+  70%{opacity:1}
+  100%{left:135%;opacity:0}
+}
+
+/* Command navigation energy line */
+.command-nav{
+  isolation:isolate;
+}
+
+.command-nav .nav-line{
+  position:relative;
+  overflow:hidden;
+}
+
+.command-nav .nav-line::after{
+  content:"";
+  position:absolute;
+  left:-30%;
+  top:0;
+  width:30%;
+  height:100%;
+  background:var(--od-cyan);
+  box-shadow:0 0 12px var(--od-cyan);
+  animation:odSignal 2.6s linear infinite;
+}
+
+@keyframes odSignal{
+  from{left:-30%}
+  to{left:130%}
+}
+
+/* Reactor status */
+.mini-reactor{
+  position:relative;
+  isolation:isolate;
+}
+
+.mini-reactor::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border:1px solid rgba(85,247,255,.35);
+  border-radius:50%;
+  border-top-color:transparent;
+  animation:odSpin 2.5s linear infinite;
+}
+
+.mini-reactor::after{
+  content:"";
+  position:absolute;
+  inset:-14px;
+  border:1px dashed rgba(155,92,255,.3);
+  border-radius:50%;
+  animation:odSpinReverse 5s linear infinite;
+}
+
+@keyframes odSpin{to{transform:rotate(360deg)}}
+@keyframes odSpinReverse{to{transform:rotate(-360deg)}}
+
+/* Input becomes a target-acquisition chamber */
+.input-shell{
+  position:relative;
+  isolation:isolate;
+}
+
+.input-shell::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border:1px solid transparent;
+  background:
+    linear-gradient(90deg,transparent,rgba(85,247,255,.45),transparent)
+    top/40% 1px no-repeat;
+  opacity:0;
+  transition:opacity .2s;
+}
+
+.input-shell:focus-within::before{
+  opacity:1;
+  animation:odInputScan 1.4s linear infinite;
+}
+
+@keyframes odInputScan{
+  0%{background-position:-40% 0}
+  100%{background-position:140% 0}
+}
+
+/* Launch button machine charge */
+#relayForm button[type="submit"]{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+#relayForm button[type="submit"]::before{
+  content:"";
+  position:absolute;
+  inset:-120% 35%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.9),
+    transparent
+  );
+  transform:rotate(18deg);
+  opacity:0;
+  z-index:-1;
+}
+
+#relayForm button[type="submit"]:hover::before{
+  opacity:1;
+  animation:odButtonFlash .75s linear infinite;
+}
+
+@keyframes odButtonFlash{
+  from{transform:translateX(-180%) rotate(18deg)}
+  to{transform:translateX(180%) rotate(18deg)}
+}
+
+/* Active targeting */
+body.machine-targeting .relay-module{
+  border-color:rgba(255,200,87,.8);
+  box-shadow:
+    0 0 0 1px rgba(255,200,87,.12),
+    0 0 45px rgba(255,200,87,.12),
+    inset 0 0 35px rgba(255,200,87,.04);
+}
+
+body.machine-targeting .relay-module::before{
+  background:
+    linear-gradient(90deg,transparent,rgba(255,200,87,.18),transparent)
+    0 0/25% 1px no-repeat;
+  animation:odTargetSweep 1.2s linear infinite;
+}
+
+@keyframes odTargetSweep{
+  from{background-position:-25% 0}
+  to{background-position:125% 0}
+}
+
+/* Charging */
+body.machine-charging .relay-module{
+  border-color:rgba(75,125,255,.85);
+  box-shadow:
+    0 0 55px rgba(75,125,255,.14),
+    inset 0 0 45px rgba(75,125,255,.06);
+}
+
+body.machine-charging .telemetry-bar span{
+  animation:odPowerCharge 1s ease-in-out infinite alternate;
+}
+
+@keyframes odPowerCharge{
+  from{width:28%}
+  to{width:98%}
+}
+
+/* Transmitting */
+body.machine-transmitting .relay-module{
+  animation:odTransmitFrame .16s linear infinite alternate;
+}
+
+body.machine-transmitting .system-strip{
+  box-shadow:0 0 40px rgba(85,247,255,.15);
+}
+
+@keyframes odTransmitFrame{
+  from{transform:translateX(-1px)}
+  to{transform:translateX(1px)}
+}
+
+/* Success */
+body.machine-success .relay-module{
+  border-color:rgba(85,255,174,.85);
+  box-shadow:
+    0 0 70px rgba(85,255,174,.15),
+    inset 0 0 50px rgba(85,255,174,.06);
+  animation:odSuccessLock .7s ease-out;
+}
+
+body.machine-success .nav-live,
+body.machine-success .module-state span,
+body.machine-success .search-status span{
+  background:var(--od-green);
+  box-shadow:0 0 14px var(--od-green);
+}
+
+@keyframes odSuccessLock{
+  0%{transform:scale(.985);filter:brightness(2)}
+  55%{transform:scale(1.008);filter:brightness(1.35)}
+  100%{transform:scale(1);filter:brightness(1)}
+}
+
+/* Failure */
+body.machine-failure .relay-module{
+  border-color:rgba(255,64,93,.9);
+  box-shadow:
+    0 0 65px rgba(255,64,93,.14),
+    inset 0 0 45px rgba(255,64,93,.05);
+  animation:odFault 90ms linear 8;
+}
+
+@keyframes odFault{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-3px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-2px)}
+  100%{transform:translateX(0)}
+}
+
+/* Search core */
+.searchSection{
+  isolation:isolate;
+}
+
+.searchSection::after{
+  animation-duration:4.5s;
+}
+
+.search-target{
+  position:relative;
+  min-height:72px;
+}
+
+.search-target::before{
+  content:"SEARCH CORE // READY";
+  position:absolute;
+  right:12px;
+  top:-18px;
+  font:600 8px/1 monospace;
+  letter-spacing:.18em;
+  color:rgba(85,247,255,.45);
+  pointer-events:none;
+}
+
+.search-target .target-corner{
+  position:absolute;
+  width:12px;
+  height:12px;
+  border-color:rgba(85,247,255,.5);
+  pointer-events:none;
+  z-index:5;
+}
+
+.search-target .tl{
+  left:0;top:0;border-left:1px solid;border-top:1px solid;
+}
+.search-target .tr{
+  right:0;top:0;border-right:1px solid;border-top:1px solid;
+}
+.search-target .bl{
+  left:0;bottom:0;border-left:1px solid;border-bottom:1px solid;
+}
+.search-target .br{
+  right:0;bottom:0;border-right:1px solid;border-bottom:1px solid;
+}
+
+/* Search focus transformation */
+.search-target:focus-within{
+  box-shadow:
+    0 0 35px rgba(85,247,255,.08),
+    inset 0 0 25px rgba(85,247,255,.035);
+}
+
+.search-target:focus-within .target-corner{
+  border-color:var(--od-cyan);
+  filter:drop-shadow(0 0 5px var(--od-cyan));
+}
+
+/* Radar */
+.radar{
+  position:relative;
+  overflow:hidden;
+}
+
+.radar-sweep{
+  position:absolute;
+  inset:0;
+  background:conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(85,247,255,.28) 14deg,
+    transparent 30deg
+  );
+  animation:odRadar 2.2s linear infinite;
+  transform-origin:center;
+}
+
+@keyframes odRadar{
+  to{transform:rotate(360deg)}
+}
+
+/* Bottom system cells */
+.system-cell{
+  position:relative;
+  overflow:hidden;
+}
+
+.system-cell::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  bottom:0;
+  width:100%;
+  height:1px;
+  background:var(--od-cyan);
+  box-shadow:0 0 10px var(--od-cyan);
+  animation:odCellSignal 3.5s linear infinite;
+}
+
+.system-cell:nth-child(2)::after{animation-delay:.4s}
+.system-cell:nth-child(3)::after{animation-delay:.8s}
+.system-cell:nth-child(4)::after{animation-delay:1.2s}
+.system-cell:nth-child(5)::after{animation-delay:1.6s}
+
+@keyframes odCellSignal{
+  from{left:-100%}
+  to{left:100%}
+}
+
+/* Signal bars */
+.signal-bars{
+  display:flex;
+  align-items:end;
+  gap:3px;
+  height:24px;
+}
+
+.signal-bars span{
+  display:block;
+  width:3px;
+  height:30%;
+  background:var(--od-cyan);
+  box-shadow:0 0 8px rgba(85,247,255,.55);
+  animation:odSignalBar .8s ease-in-out infinite alternate;
+}
+
+.signal-bars span:nth-child(2){height:65%;animation-delay:.08s}
+.signal-bars span:nth-child(3){height:45%;animation-delay:.16s}
+.signal-bars span:nth-child(4){height:90%;animation-delay:.24s}
+.signal-bars span:nth-child(5){height:55%;animation-delay:.32s}
+.signal-bars span:nth-child(6){height:78%;animation-delay:.4s}
+.signal-bars span:nth-child(7){height:42%;animation-delay:.48s}
+.signal-bars span:nth-child(8){height:100%;animation-delay:.56s}
+
+@keyframes odSignalBar{
+  from{transform:scaleY(.45);opacity:.45}
+  to{transform:scaleY(1);opacity:1}
+}
+
+/* Boot screen extra machine framing */
+#bootScreen::before,
+#bootScreen::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:20;
+}
+
+#bootScreen::before{
+  inset:24px;
+  border:1px solid rgba(85,247,255,.12);
+  clip-path:polygon(
+    0 0,12% 0,12% 1px,0 1px,
+    0 12%,1px 12%,1px 0,
+    100% 0,88% 0,88% 1px,100% 1px,
+    100% 12%,calc(100% - 1px) 12%,calc(100% - 1px) 0,
+    100% 100%,88% 100%,88% calc(100% - 1px),100% calc(100% - 1px),
+    100% 88%,calc(100% - 1px) 88%,calc(100% - 1px) 100%,
+    0 100%,12% 100%,12% calc(100% - 1px),0 calc(100% - 1px),
+    0 88%,1px 88%,1px 100%
+  );
+}
+
+#bootScreen .boot-hud{
+  position:absolute;
+  top:34px;
+  z-index:30;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  font:600 8px/1 monospace;
+  letter-spacing:.2em;
+  color:rgba(85,247,255,.55);
+}
+
+#bootScreen .boot-hud-left{left:42px}
+#bootScreen .boot-hud-right{
+  right:42px;
+  text-align:right;
+}
+
+#bootScreen .boot-hud span::before{
+  content:"// ";
+  opacity:.45;
+}
+
+#bootScreen .boot-status{
+  letter-spacing:.18em;
+}
+
+/* Mobile */
+@media(max-width:900px){
+  .shell{
+    transform:none!important;
+  }
+
+  #app::after{
+    display:none;
+  }
+
+  #bootScreen .boot-hud{
+    display:none;
+  }
+
+  .side-panel{
+    display:none;
+  }
+}
+
+@media(max-width:600px){
+  .system-strip{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .system-cell-wide{
+    grid-column:1/-1;
+  }
+
+  .command-nav .nav-center,
+  .command-nav .badge{
+    display:none;
+  }
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+
+  .shell{
+    transform:none!important;
+  }
+}
